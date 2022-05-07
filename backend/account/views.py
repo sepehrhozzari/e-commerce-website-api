@@ -9,3 +9,9 @@ class UserList(ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [IsSuperUserOrAdmin, ]
+
+
+class UserRetrieve(RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [IsSuperUserOrAdmin, ]
