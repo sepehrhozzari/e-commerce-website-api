@@ -21,7 +21,7 @@ services:
     volumes:
       - "./backend:/backend"
       - "static_volume:/backend/static"
-      - "media_volume:backend/media"
+      - "media_volume:/backend/media"
     depends_on:
       - "postgresql"
 
