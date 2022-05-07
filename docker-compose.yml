@@ -25,6 +25,20 @@ services:
     depends_on:
       - "postgresql"
 
+  nginx:
+    build: "./nginx"
+    container_name: "nginx"
+    restart: "always"
+    ports:
+      - "80:80"
+    volumes:
+      - "./nginx/nginx.conf:/etc/nginx/conf.d/default.conf"
+      - "static_volume:/backend/static"
+      - "media_volume:/backend/media"
+    depends_on:
+      - "postgresql"
+      - "backend"
+
 volumes:
   static_volume:
     external: true
