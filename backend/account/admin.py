@@ -5,5 +5,6 @@ from django.contrib.auth.admin import UserAdmin
 
 UserAdmin.fieldsets += (None,
                         {"fields": ("profile_picture", "city", "address")}),
+UserAdmin.list_display += ("city",)
 
 admin.site.register(User, UserAdmin)
