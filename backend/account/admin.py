@@ -7,5 +7,6 @@ UserAdmin.fieldsets += (None,
                         {"fields": ("profile_picture", "city", "address")}),
 UserAdmin.list_display += ("city",)
 UserAdmin.list_filter += ("city",)
+UserAdmin.search_fields += ("address",)
 
 admin.site.register(User, UserAdmin)
