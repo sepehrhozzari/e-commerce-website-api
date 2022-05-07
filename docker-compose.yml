@@ -1,0 +1,12 @@
+version: "3.7"
+
+services:
+  postgresql:
+    image: postgres:latest
+    container_name: "postgresql"
+    restart: "always"
+    expose:
+      - "5432"
+    env_file: "./postgresql/.env"
+    volumes:
+      "./postgresql/data:/var/lib/postgresql/data"
