@@ -9,7 +9,7 @@ services:
       - "5432"
     env_file: "./postgresql/.env"
     volumes:
-      "./postgresql/data:/var/lib/postgresql/data"
+      - "./postgresql/data:/var/lib/postgresql/data"
 
   backend:
     build: "./backend"
