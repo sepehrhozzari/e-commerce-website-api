@@ -16,18 +16,23 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from dj_rest_auth.views import PasswordResetConfirmView
+from account.views import CustomizedUserDetailsView
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path('api-auth/', include("rest_framework.urls")),
 
     path('api/rest-auth/', include("dj_rest_auth.urls")),
     path('api/rest-auth/registration/',
          include("dj_rest_auth.registration.urls")),
+
+
+    # override url's for dj_rest_auth for customization
     path('api/rest-auth/password/reset/confirm/<uidb64>/<token>',
          PasswordResetConfirmView.as_view(), name="password_reset_confirm"),
+    path('api/rest-auth/user/', CustomizedUserDetailsView.as_view(),
+         name='rest_user_details'),
 
     path("api/account/", include("account.urls")),
 ]
