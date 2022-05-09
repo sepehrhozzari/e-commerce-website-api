@@ -7,7 +7,7 @@ class CategoryManager(models.Manager):
 
 
 class Category(models.Model):
-    parent = models.ForeignKey("self", null=True, on_delete=models.SET_NULL,
+    parent = models.ForeignKey("self", default=None, null=True, on_delete=models.SET_NULL,
                                related_name="children", verbose_name="زیردسته")
     title = models.CharField(max_length=200, verbose_name="عنوان دسته بندی")
     image = models.ImageField(upload_to="category/",
