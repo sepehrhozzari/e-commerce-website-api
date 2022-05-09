@@ -21,3 +21,6 @@ class Item(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_amount_saved(self):
+        return self.price - self.discount_price
