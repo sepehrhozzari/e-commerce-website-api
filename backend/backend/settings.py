@@ -154,6 +154,9 @@ AUTH_USER_MODEL = "ecommerce_account.User"
 
 # REST_FRAMEWORK settings
 REST_FRAMEWORK = {
+    "DEFAULT_VERSIONING_CLASS": [
+        "rest_framework.versioning.Namespaceversioning",
+    ],
     "DEFAULT_THROTTLE_CLASSES": [
         "rest_framework.throttling.AnonRateThrottle",
         "rest_framework.throttling.UserRateThrottle",
