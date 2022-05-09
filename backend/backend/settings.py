@@ -148,12 +148,20 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
+# django authentication settings
 AUTH_USER_MODEL = "ecommerce_account.User"
 
 
 # REST_FRAMEWORK settings
 REST_FRAMEWORK = {
+    "DEFAULT_THROTTLE_CLASSES": [
+        "rest_framework.throttling.AnonRateThrottle",
+        "rest_framework.throttling.UserRateThrottle",
+    ],
+    "DEFAULT_THROTTLE_RATES": {
+        'anon': '200/hour',
+        'user': '400/hour',
+    },
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "dj_rest_auth.jwt_auth.JWTCookieAuthentication",
     ],
@@ -166,7 +174,7 @@ REST_FRAMEWORK = {
         "rest_framework.filters.OrderingFilter",
     ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
-    "PAGE_SIZE": 30
+    "PAGE_SIZE": 30,
 }
 REST_USE_JWT = True
 JWT_AUTH_COOKIE = 'access'
