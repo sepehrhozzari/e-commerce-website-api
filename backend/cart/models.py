@@ -41,6 +41,7 @@ class Item(models.Model):
 
     def image_tag(self):
         return format_html(f"<img src='{self.image.url}' width=150 height=100>")
+    image_tag.short_description = "تصویر محصول"
 
     def get_amount_saved(self):
         return self.price - self.discount_price
