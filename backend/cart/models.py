@@ -29,7 +29,7 @@ class Item(models.Model):
     dislikes = models.ManyToManyField(
         User, blank=True, related_name="disliked_items", verbose_name="دیس لایک")
     hits = models.ManyToManyField(
-        IPAddress, blank=True, related_name="hits", verbose_name="بازدید ها")
+        IPAddress, blank=True, through="ItemHit", related_name="hits", verbose_name="بازدید ها")
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -53,3 +53,9 @@ class Item(models.Model):
         ordering = ("-created",)
         verbose_name = "محصول"
         verbose_name_plural = "محصولات"
+
+
+class ItemHit(models.Model):
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    ip_address = models.ForeignKey(IPAddress, on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
