@@ -9,3 +9,6 @@ class Category(models.Model):
                               verbose_name="تصویر دسته بندی")
     is_active = models.BooleanField(default=True, verbose_name="فعال")
     position = models.IntegerField(verbose_name="پوزیشن")
+
+    def __str__(self):
+        return self.title
