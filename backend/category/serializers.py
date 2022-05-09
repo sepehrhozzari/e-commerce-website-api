@@ -3,7 +3,7 @@ from .models import Category
 
 
 class CategoryDisplaySerializer(serializers.ModelSerializer):
-    parent = serializers.CharField(source="parent.title")
+    parent = serializers.StringRelatedField()
 
     class Meta:
         model = Category
