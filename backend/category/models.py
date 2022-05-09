@@ -27,4 +27,5 @@ class Category(models.Model):
         verbose_name_plural = "دسته بندی ها"
 
     def image_tag(self):
-        return format_html(f"<img src='{self.image.url}' width=120 height=120>")
+        return format_html(f"<img src='{self.image.url}' width=150 height=100>")
+    image_tag.short_description = "تصویر دسته بندی"
