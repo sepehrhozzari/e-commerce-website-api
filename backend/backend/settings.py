@@ -51,6 +51,7 @@ INSTALLED_APPS = [
 
     # our apps
     'account.apps.AccountConfig',
+    'cart.apps.CartConfig',
 ]
 
 MIDDLEWARE = [
@@ -61,6 +62,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'account.middleware.SaveIPAddressMiddleware',
 ]
 
 ROOT_URLCONF = 'backend.urls'
