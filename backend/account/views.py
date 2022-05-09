@@ -10,6 +10,7 @@ class UserList(ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [IsAdmin, ]
+    filterset_fields = ("city", "is_staff", "is_superuser")
 
 
 class UserRetrieve(RetrieveAPIView):
