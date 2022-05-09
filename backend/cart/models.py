@@ -32,3 +32,8 @@ class Item(models.Model):
     @property
     def dislike_count(self):
         return self.dislikes.count()
+
+    class Meta:
+        ordering = ("-created",)
+        verbose_name = "محصول"
+        verbose_name_plural = "محصولات"
