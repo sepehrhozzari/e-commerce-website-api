@@ -16,3 +16,7 @@ class User(AbstractUser):
     city = models.CharField(
         max_length=20, choices=CITY_CHOICES, blank=True, verbose_name="شهر")
     address = models.TextField(blank=True, verbose_name="آدرس")
+
+
+class IPAddress(models.Model):
+    ip_address = models.GenericIPAddressField(verbose_name="آدرس آی‌پی")
