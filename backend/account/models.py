@@ -20,3 +20,6 @@ class User(AbstractUser):
 
 class IPAddress(models.Model):
     ip_address = models.GenericIPAddressField(verbose_name="آدرس آی‌پی")
+
+    def __str__(self):
+        return self.ip_address
