@@ -1,5 +1,5 @@
 from django.db import models
-from account.models import User
+from account.models import User, IPAddress
 
 
 class ItemQuerySet(models.query.QuerySet):
@@ -28,6 +28,8 @@ class Item(models.Model):
         User, blank=True, related_name="liked_items", verbose_name="لایک")
     dislikes = models.ManyToManyField(
         User, blank=True, related_name="disliked_items", verbose_name="دیس لایک")
+    hits = models.ManyToManyField(
+        IPAddress, blank=True, related_name="hits", verbose_name="بازدید ها")
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
