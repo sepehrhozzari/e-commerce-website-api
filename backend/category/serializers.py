@@ -8,3 +8,9 @@ class CategoryDisplaySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         exclude = ("is_active",)
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = "__all__"
