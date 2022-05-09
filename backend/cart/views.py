@@ -10,6 +10,7 @@ class ItemViewSet(ModelViewSet):
     permission_classes = [IsAdminOrReadOnly, ]
     filterset_fields = ("in_stock",)
     search_fields = ("title", "description")
+    ordering_fields = ("in_stock",)
 
     def get_serializer_class(self):
         if self.action in ["list", "retrieve"]:
