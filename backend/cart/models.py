@@ -1,5 +1,6 @@
 from django.db import models
 from account.models import User, IPAddress
+from django.utils.html import format_html
 
 
 class ItemQuerySet(models.query.QuerySet):
@@ -37,6 +38,10 @@ class Item(models.Model):
         return self.title
 
     objects = ItemManager()
+
+    def image_tag(self):
+        return format_html(f"<img src='{self.image.url}' width=150 height=100>")
+    image_tag.short_description = "تصویر محصول"
 
     def get_amount_saved(self):
         return self.price - self.discount_price
