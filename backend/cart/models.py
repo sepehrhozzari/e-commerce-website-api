@@ -23,7 +23,7 @@ class Item(models.Model):
     discount_price = models.DecimalField(
         max_digits=10, decimal_places=2, verbose_name="قیمت محصول با تخفیف")
     description = models.TextField(verbose_name="توضیحات محصول")
-    in_stock = models.IntegerField(default=True, verbose_name="موجود در انبار")
+    in_stock = models.BooleanField(default=True, verbose_name="موجود در انبار")
     likes = models.ManyToManyField(
         User, blank=True, related_name="liked_items", verbose_name="لایک")
     dislikes = models.ManyToManyField(
