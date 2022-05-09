@@ -11,6 +11,7 @@ class UserList(ListAPIView):
     serializer_class = UserSerializer
     permission_classes = [IsAdmin, ]
     filterset_fields = ("city", "is_staff", "is_superuser")
+    search_fields = ("username", "first_name", "last_name", "email", "address")
 
 
 class UserRetrieve(RetrieveAPIView):
