@@ -2,8 +2,17 @@ from django.db import models
 from account.models import User
 
 
+class ItemQuerySet(models.query.QuerySet):
+    def in_stock(self):
+        return self.filter(in_stock=True)
+
+
 class ItemManager(models.Manager):
-    pass
+    def get_queryset(self):
+        return ItemQuerySet(self.model, using=self._db)
+
+    def in_stock(self):
+        return self.get_queryset().in_stock()
 
 
 class Item(models.Model):
