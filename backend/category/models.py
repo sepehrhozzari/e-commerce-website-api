@@ -1,6 +1,11 @@
 from django.db import models
 
 
+class CategoryManager(models.Manager):
+    def is_active(self):
+        return self.filter(is_active=True)
+
+
 class Category(models.Model):
     parent = models.ForeignKey("self", null=True, on_delete=models.SET_NULL,
                                related_name="children", verbose_name="زیردسته")
@@ -12,6 +17,8 @@ class Category(models.Model):
 
     def __str__(self):
         return self.title
+
+    objects = CategoryManager()
 
     class Meta:
         ordering = ("parent__id", "position")
