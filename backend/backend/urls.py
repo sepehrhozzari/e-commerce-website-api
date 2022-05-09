@@ -23,10 +23,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
 
+    # urls for dj_rest_auth
     path('api/rest-auth/', include("dj_rest_auth.urls")),
     path('api/rest-auth/registration/',
          include("dj_rest_auth.registration.urls")),
-
 
     # override url's for dj_rest_auth for customization
     path('api/rest-auth/password/reset/confirm/<uidb64>/<token>',
@@ -34,5 +34,11 @@ urlpatterns = [
     path('api/rest-auth/user/', CustomizedUserDetailsView.as_view(),
          name='rest_user_details'),
 
+
+    # urls for account app
     path("api/account/", include("account.urls")),
+
+
+    # urls for cart app
+    path("api/cart/", include("cart.urls")),
 ]
