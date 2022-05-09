@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.html import format_html
 
 
 class CategoryManager(models.Manager):
@@ -24,3 +25,6 @@ class Category(models.Model):
         ordering = ("parent__id", "position")
         verbose_name = "دسته بندی"
         verbose_name_plural = "دسته بندی ها"
+
+    def image_tag(self):
+        return format_html(f"<img src='{self.image.url}' width=120 height=120>")
