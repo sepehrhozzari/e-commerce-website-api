@@ -28,3 +28,7 @@ class Item(models.Model):
     @property
     def like_count(self):
         return self.likes.count()
+
+    @property
+    def dislike_count(self):
+        return self.dislikes.count()
