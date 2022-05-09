@@ -12,3 +12,8 @@ class Category(models.Model):
 
     def __str__(self):
         return self.title
+
+    class Meta:
+        ordering = ("parent__id", "position")
+        verbose_name = "دسته بندی"
+        verbose_name_plural = "دسته بندی ها"
