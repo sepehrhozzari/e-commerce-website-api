@@ -1,5 +1,6 @@
 from django.db import models
 from account.models import User
+from django.urls import reverse
 
 
 class Item(models.Model):
@@ -17,3 +18,6 @@ class Item(models.Model):
         User, blank=True, related_name="disliked_items", verbose_name="دیس لایک")
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.title
