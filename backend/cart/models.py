@@ -1,6 +1,9 @@
 from django.db import models
 from account.models import User
-from django.urls import reverse
+
+
+class ItemManager(models.Manager):
+    pass
 
 
 class Item(models.Model):
@@ -21,6 +24,8 @@ class Item(models.Model):
 
     def __str__(self):
         return self.title
+
+    objects = ItemManager()
 
     def get_amount_saved(self):
         return self.price - self.discount_price
