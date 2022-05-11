@@ -22,6 +22,7 @@ class CartAdmin(admin.ModelAdmin):
     list_filter = ("paid_time", "is_paid")
     search_fields = ("user__username", "user__first_name",
                      "user__last_name", "user__email")
+    ordering = ("is_paid", "-paid_time")
 
 
 admin.site.register(Item, ItemAdmin)
