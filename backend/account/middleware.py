@@ -1,11 +1,10 @@
 from .models import IPAddress
-from django.core.exceptions import ObjectDoesNotExist
 
 
 class SaveIPAddressMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
-        # One time configuration and initialization
+        # One-time configuration and initialization
 
     def __call__(self, request):
         # Code to be executed for each request before
@@ -21,7 +20,7 @@ class SaveIPAddressMiddleware:
         except IPAddress.DoesNotExist:
             ip_address = IPAddress(ip_address=ip)
             ip_address.save()
-        request.user.ip_address = ip_address
+        request.ip_address = ip_address
 
         response = self.get_response(request)
 
