@@ -71,3 +71,12 @@ class ItemHit(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     ip_address = models.ForeignKey(IPAddress, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
+
+
+class CartItem(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE,
+                             related_name="cart_items", verbose_name="کاربر")
+    item = models.ForeignKey(Item, on_delete=models.CASCADE,
+                             related_name="cart_items", verbose_name="محصول")
+    quantity = models.IntegerField(default=1, verbose_name="تعداد")
+    is_paid = models.BooleanField(default=False)
