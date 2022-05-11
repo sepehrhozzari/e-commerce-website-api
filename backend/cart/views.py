@@ -16,3 +16,9 @@ class ItemViewSet(ModelViewSet):
         if self.action in ["list", "retrieve"]:
             return ItemDisplaySerializer
         return ItemSerializer
+
+    def retrieve(self, request, *args, **kwargs):
+        item = self.get_object()
+        if request.ip_address not in item.hits.all():
+            item.hits.add(request.ip_address)
+        return super().retrieve(request, *args, **kwargs)
