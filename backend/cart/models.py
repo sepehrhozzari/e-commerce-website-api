@@ -1,6 +1,7 @@
 from django.db import models
 from account.models import User, IPAddress
 from django.utils.html import format_html
+from category.models import Category
 
 
 class ItemQuerySet(models.query.QuerySet):
@@ -17,6 +18,8 @@ class ItemManager(models.Manager):
 
 
 class Item(models.Model):
+    category = models.ForeignKey(
+        Category, null=True, on_delete=models.SET_NULL, related_name="items", verbose_name="دسته بندی")
     title = models.CharField(max_length=200, verbose_name="عنوان محصول")
     image = models.ImageField(upload_to="cart/", verbose_name="تصویر محصول")
     price = models.DecimalField(
