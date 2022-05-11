@@ -10,7 +10,7 @@ class ItemDisplaySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Item
-        fields = "__all__"
+        exclude = ("created", "updated")
 
     def get_category(self, obj):
         return {
