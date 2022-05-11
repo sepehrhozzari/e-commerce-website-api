@@ -79,7 +79,7 @@ class CartItem(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE,
                              related_name="cart_items", verbose_name="محصول")
     quantity = models.IntegerField(default=1, verbose_name="تعداد")
-    is_paid = models.BooleanField(default=False)
+    is_paid = models.BooleanField(default=False, verbose_name="پرداخت شده")
 
     def __str__(self):
         return f"{self.quantity} عدد از {self.item}"
