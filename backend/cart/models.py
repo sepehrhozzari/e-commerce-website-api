@@ -83,3 +83,7 @@ class CartItem(models.Model):
 
     def __str__(self):
         return f"{self.quantity} عدد از {self.item}"
+
+    class Meta:
+        verbose_name = "آیتم سبد خرید"
+        verbose_name_plural = "آیتم های سبد خرید"
