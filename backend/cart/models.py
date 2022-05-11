@@ -80,3 +80,6 @@ class CartItem(models.Model):
                              related_name="cart_items", verbose_name="محصول")
     quantity = models.IntegerField(default=1, verbose_name="تعداد")
     is_paid = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.quantity} عدد از {self.item}"
