@@ -57,9 +57,9 @@ class Item(models.Model):
         return self.dislikes.count()
     get_dislike_count.short_description = "تعداد دیس لایک"
 
-    @property
-    def hits_count(self):
+    def get_hits_count(self):
         return self.hits.count()
+    get_hits_count.short_description = "تعداد بازدید ها"
 
     class Meta:
         ordering = ("-created",)
