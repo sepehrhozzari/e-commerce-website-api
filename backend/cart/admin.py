@@ -9,6 +9,10 @@ class ItemAdmin(admin.ModelAdmin):
     search_fields = ("title", "description")
 
 
+class CartItemAdmin(admin.ModelAdmin):
+    list_display = ("user", "item", "quantity", "is_paid")
+
+
 admin.site.register(Item, ItemAdmin)
-admin.site.register(CartItem)
+admin.site.register(CartItem, CartItemAdmin)
 admin.site.register(Cart)
