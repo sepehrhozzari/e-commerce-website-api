@@ -16,7 +16,7 @@ class ItemViewSet(ModelViewSet):
     ordering_fields = ("in_stock",)
 
     def get_permissions(self):
-        if self.action == "like":
+        if self.action in ["like", "dislike"]:
             permission_classes = [IsAuthenticated, ]
         else:
             permission_classes = [IsAdminOrReadOnly]
@@ -51,4 +51,24 @@ class ItemViewSet(ModelViewSet):
             else:
                 item.likes.add(request.user)
                 message = "محصول مورد نظر لایک شد"
+        return Response({"message": message}, status=HTTP_200_OK)
+
+    @action(detail=True, methods=["get"])
+    def dislike(self, request, pk=None):
+        item = self.get_object()
+        if request.user in item.likes.all():
+            item.likes.remove(request.user)
+            if request.user in item.dislikes.all():
+                item.dislikes.remove(request.user)
+                message = "لایک و دیس لایک برای محصول مورد نظر برداشته شد"
+            else:
+                item.dislikes.add(request.user)
+                message = "لایک برای محصول مورد نظر برداشته و دیس لاک شد"
+        else:
+            if request.user in item.dislikes.all():
+                item.dislikes.remove(request.user)
+                message = "دیس لایک برای محصول مورد نظر با موفقیت برداشته شد"
+            else:
+                item.dislikes.add(request.user)
+                message = "محصول مورد نظر دیس لایک شد"
         return Response({"message": message}, status=HTTP_200_OK)
