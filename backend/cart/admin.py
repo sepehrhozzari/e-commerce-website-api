@@ -20,6 +20,8 @@ class CartItemAdmin(admin.ModelAdmin):
 class CartAdmin(admin.ModelAdmin):
     list_display = ("user", "is_paid", "paid_time")
     list_filter = ("paid_time", "is_paid")
+    search_fields = ("user__username", "user__first_name",
+                     "user__last_name", "user__email")
 
 
 admin.site.register(Item, ItemAdmin)
