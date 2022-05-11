@@ -12,6 +12,7 @@ class ItemAdmin(admin.ModelAdmin):
 class CartItemAdmin(admin.ModelAdmin):
     list_display = ("user", "item", "quantity", "is_paid")
     list_filter = ("is_paid",)
+    ordering = ("is_paid",)
 
 
 admin.site.register(Item, ItemAdmin)
