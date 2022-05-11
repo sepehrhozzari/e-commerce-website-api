@@ -49,9 +49,9 @@ class Item(models.Model):
     def get_amount_saved(self):
         return self.price - self.discount_price
 
-    @property
-    def like_count(self):
+    def get_like_count(self):
         return self.likes.count()
+    get_like_count.short_description = "تعداد لایک ها"
 
     @property
     def dislike_count(self):
