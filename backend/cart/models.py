@@ -93,3 +93,12 @@ class CartItem(models.Model):
 
     def get_total_discount_price(self):
         return self.item.discount_price * self.quantity
+
+
+class Cart(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="carts", verbose_name="کاربر")
+    items = models.ManyToManyField(
+        CartItem, related_name="carts", verbose_name="محصولات")
+    is_paid = models.BooleanField(default=False, verbose_name="پرداخت شده")
+    paid_time = models.DateTimeField(blank=True, verbose_name="زمان پراخت")
