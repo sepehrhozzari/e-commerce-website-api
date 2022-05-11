@@ -53,9 +53,9 @@ class Item(models.Model):
         return self.likes.count()
     get_like_count.short_description = "تعداد لایک ها"
 
-    @property
-    def dislike_count(self):
+    def get_dislike_count(self):
         return self.dislikes.count()
+    get_dislike_count.short_description = "تعداد دیس لایک"
 
     @property
     def hits_count(self):
