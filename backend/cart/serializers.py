@@ -3,9 +3,9 @@ from .models import Item
 
 
 class ItemDisplaySerializer(serializers.ModelSerializer):
-    likes = serializers.IntegerField(source="like_count")
-    dislikes = serializers.IntegerField(source="dislike_count")
-    hits = serializers.IntegerField(source="hits_count")
+    likes = serializers.IntegerField(source="likes.count")
+    dislikes = serializers.IntegerField(source="dislikes.count")
+    hits = serializers.IntegerField(source="hits.count")
     category = serializers.SerializerMethodField()
 
     class Meta:
