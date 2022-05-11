@@ -1,6 +1,7 @@
 from django.db import models
 from account.models import User, IPAddress
 from django.utils.html import format_html
+from category.models import Category
 
 
 class ItemQuerySet(models.query.QuerySet):
@@ -17,6 +18,8 @@ class ItemManager(models.Manager):
 
 
 class Item(models.Model):
+    category = models.ForeignKey(
+        Category, null=True, on_delete=models.SET_NULL, related_name="items", verbose_name="دسته بندی")
     title = models.CharField(max_length=200, verbose_name="عنوان محصول")
     image = models.ImageField(upload_to="cart/", verbose_name="تصویر محصول")
     price = models.DecimalField(
@@ -46,17 +49,17 @@ class Item(models.Model):
     def get_amount_saved(self):
         return self.price - self.discount_price
 
-    @property
-    def like_count(self):
+    def get_like_count(self):
         return self.likes.count()
+    get_like_count.short_description = "تعداد لایک ها"
 
-    @property
-    def dislike_count(self):
+    def get_dislike_count(self):
         return self.dislikes.count()
+    get_dislike_count.short_description = "تعداد دیس لایک"
 
-    @property
-    def hits_count(self):
+    def get_hits_count(self):
         return self.hits.count()
+    get_hits_count.short_description = "تعداد بازدید ها"
 
     class Meta:
         ordering = ("-created",)
@@ -68,3 +71,42 @@ class ItemHit(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     ip_address = models.ForeignKey(IPAddress, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
+
+
+class CartItem(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE,
+                             related_name="cart_items", verbose_name="کاربر")
+    item = models.ForeignKey(Item, on_delete=models.CASCADE,
+                             related_name="cart_items", verbose_name="محصول")
+    quantity = models.IntegerField(default=1, verbose_name="تعداد")
+    is_paid = models.BooleanField(default=False, verbose_name="پرداخت شده")
+
+    def __str__(self):
+        return f"{self.quantity} عدد از {self.item}"
+
+    class Meta:
+        verbose_name = "آیتم سبد خرید"
+        verbose_name_plural = "آیتم های سبد خرید"
+
+    def get_total_price(self):
+        return self.item.price * self.quantity
+
+    def get_total_discount_price(self):
+        return self.item.discount_price * self.quantity
+
+
+class Cart(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="carts", verbose_name="کاربر")
+    items = models.ManyToManyField(
+        CartItem, related_name="carts", verbose_name="محصولات")
+    is_paid = models.BooleanField(default=False, verbose_name="پرداخت شده")
+    paid_time = models.DateTimeField(blank=True, verbose_name="زمان پراخت")
+
+    def __str__(self):
+        return self.user.get_full_name()
+
+    class Meta:
+        verbose_name = "سبد خرید"
+        verbose_name_plural = "سبد های خرید"
+        ordering = ("-is_paid",)
