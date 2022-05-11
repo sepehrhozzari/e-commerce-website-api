@@ -105,3 +105,8 @@ class Cart(models.Model):
 
     def __str__(self):
         return self.user.get_full_name()
+
+    class Meta:
+        verbose_name = "سبد خرید"
+        verbose_name_plural = "سبد های خرید"
+        ordering = ("-is_paid",)
