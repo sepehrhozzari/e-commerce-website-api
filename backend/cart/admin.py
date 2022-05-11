@@ -17,6 +17,10 @@ class CartItemAdmin(admin.ModelAdmin):
     ordering = ("is_paid",)
 
 
+class CartAdmin(admin.ModelAdmin):
+    list_display = ("user", "is_paid", "paid_time")
+
+
 admin.site.register(Item, ItemAdmin)
 admin.site.register(CartItem, CartItemAdmin)
-admin.site.register(Cart)
+admin.site.register(Cart, CartAdmin)
