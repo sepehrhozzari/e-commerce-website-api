@@ -30,3 +30,12 @@ class BasicItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
         fields = ("title", "image", "price", "discount_price")
+
+
+class CartItemSerializer(serializers.ModelSerializer):
+    user = serializers.CharField(source="user.username")
+    item = BasicItemSerializer()
+
+    class Meta:
+        model = CartItem
+        fields = ("user", "item", "quantity", "is_paid")
