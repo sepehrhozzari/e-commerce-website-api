@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Item
+from .models import Item, CartItem
 
 
 class ItemDisplaySerializer(serializers.ModelSerializer):
@@ -24,3 +24,9 @@ class ItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
         exclude = ("likes", "dislikes", "hits")
+
+
+class BasicItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Item
+        fields = ("title", "image", "price", "discount_price")
