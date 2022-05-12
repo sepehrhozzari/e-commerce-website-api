@@ -1,16 +1,16 @@
 from rest_framework import serializers
-from .models import Item
+from .models import Item, CartItem
 
 
 class ItemDisplaySerializer(serializers.ModelSerializer):
-    likes = serializers.IntegerField(source="like_count")
-    dislikes = serializers.IntegerField(source="dislike_count")
-    hits = serializers.IntegerField(source="hits_count")
+    likes = serializers.IntegerField(source="likes.count")
+    dislikes = serializers.IntegerField(source="dislikes.count")
+    hits = serializers.IntegerField(source="hits.count")
     category = serializers.SerializerMethodField()
 
     class Meta:
         model = Item
-        fields = "__all__"
+        exclude = ("created", "updated")
 
     def get_category(self, obj):
         return {
@@ -24,3 +24,18 @@ class ItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
         exclude = ("likes", "dislikes", "hits")
+
+
+class BasicItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Item
+        fields = ("title", "image", "price", "discount_price")
+
+
+class CartItemSerializer(serializers.ModelSerializer):
+    user = serializers.CharField(source="user.username")
+    item = BasicItemSerializer()
+
+    class Meta:
+        model = CartItem
+        fields = ("user", "item", "quantity", "is_paid")

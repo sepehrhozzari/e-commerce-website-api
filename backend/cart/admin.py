@@ -9,6 +9,22 @@ class ItemAdmin(admin.ModelAdmin):
     search_fields = ("title", "description")
 
 
+class CartItemAdmin(admin.ModelAdmin):
+    list_display = ("user", "item", "quantity", "is_paid")
+    list_filter = ("is_paid",)
+    search_fields = ("user__username", "user__first_name",
+                     "user__last_name", "user__email")
+    ordering = ("is_paid",)
+
+
+class CartAdmin(admin.ModelAdmin):
+    list_display = ("user", "is_paid", "paid_time")
+    list_filter = ("paid_time", "is_paid")
+    search_fields = ("user__username", "user__first_name",
+                     "user__last_name", "user__email")
+    ordering = ("is_paid", "-paid_time")
+
+
 admin.site.register(Item, ItemAdmin)
-admin.site.register(CartItem)
-admin.site.register(Cart)
+admin.site.register(CartItem, CartItemAdmin)
+admin.site.register(Cart, CartAdmin)
