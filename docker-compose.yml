@@ -18,6 +18,8 @@ services:
     expose:
       - "8000"
     env_file: "./backend/.env"
+    environment:
+      - DJANGO_SETTINGS_MODULE=backend.settings.dev
     volumes:
       - "./backend:/backend"
       - "static_volume:/backend/static"
