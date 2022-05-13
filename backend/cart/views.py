@@ -1,12 +1,13 @@
 from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet
-from .models import Item
-from .serializers import ItemDisplaySerializer, ItemSerializer
+from .models import Item, CartItem, Cart
+from .serializers import ItemDisplaySerializer, ItemSerializer, CartItemSerializer
 from rest_framework.permissions import IsAuthenticated
 from account.permissions import IsAdminOrReadOnly
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.status import HTTP_200_OK
+from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_206_PARTIAL_CONTENT
+from .permissions import IsAdminOrCustomer
 
 
 class ItemViewSet(ModelViewSet):
@@ -72,3 +73,33 @@ class ItemViewSet(ModelViewSet):
                 item.dislikes.add(request.user)
                 message = "محصول مورد نظر دیس لایک شد"
         return Response({"message": message}, status=HTTP_200_OK)
+
+
+class CartItemViewSet(ModelViewSet):
+    permission_classes = [IsAdminOrCustomer, ]
+    serializer_class = CartItemSerializer
+
+    def get_queryset(self):
+        return CartItem.objects.filter(user=self.request.user)
+
+    def create(self, request, *args, **kwargs):
+        item = Item.objects.get(pk=request.data["item_pk"])
+        try:
+            cart_item = CartItem.objects.get(
+                user=request.user, item=item, is_paid=False)
+            cart_item.quantity += 1
+            cart_item.save()
+            status = HTTP_206_PARTIAL_CONTENT
+        except:
+            cart_item = CartItem.objects.create(
+                user=request.user, item=item)
+            status = HTTP_201_CREATED
+            try:
+                cart = Cart.objects.get(user=request.user, is_paid=False)
+                cart.items.add(cart_item)
+            except Cart.DoesNotExist:
+                cart = Cart.objects.create(user=request.user)
+                cart.items.add(cart_item)
+
+        serializer = CartItemSerializer(cart_item)
+        return Response(serializer.data, status=status)
