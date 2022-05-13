@@ -23,9 +23,9 @@ class Item(models.Model):
     title = models.CharField(max_length=200, verbose_name="عنوان محصول")
     image = models.ImageField(upload_to="cart/", verbose_name="تصویر محصول")
     price = models.DecimalField(
-        max_digits=10, decimal_places=2, verbose_name="قیمت محصول")
+        max_digits=10, decimal_places=0, verbose_name="قیمت محصول")
     discount_price = models.DecimalField(
-        max_digits=10, decimal_places=2, verbose_name="قیمت محصول با تخفیف")
+        max_digits=10, decimal_places=0, verbose_name="قیمت محصول با تخفیف")
     description = models.TextField(verbose_name="توضیحات محصول")
     in_stock = models.BooleanField(default=True, verbose_name="موجود در انبار")
     likes = models.ManyToManyField(
