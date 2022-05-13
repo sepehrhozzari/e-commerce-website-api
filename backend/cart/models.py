@@ -117,19 +117,19 @@ class Cart(models.Model):
     def total_price(self):
         total = 0
         for cart_item in self.items.all():
-            total += cart_item.total_price()
+            total += cart_item.total_price
         return total
 
     @property
     def total_discount_price(self):
         total = 0
         for cart_item in self.items.all():
-            total += cart_item.total_discount_price()
+            total += cart_item.total_discount_price
         return total
 
     @property
     def amount_saved(self):
         total = 0
         for cart_item in self.items.all():
-            total += cart_item.amount_saved()
+            total += cart_item.amount_saved
         return total
