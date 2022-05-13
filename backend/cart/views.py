@@ -97,6 +97,8 @@ class CartItemViewSet(ListModelMixin, CreateModelMixin,
                       RetrieveModelMixin, DestroyModelMixin, GenericViewSet):
     permission_classes = [IsAdminOrCustomer, ]
     serializer_class = CartItemSerializer
+    search_fields = ("item__title", "item__description",
+                     "user__username", "user__first_name")
 
     def get_queryset(self):
         return CartItem.objects.filter(user=self.request.user).select_related("user", "item")
