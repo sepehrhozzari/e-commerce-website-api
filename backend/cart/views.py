@@ -5,6 +5,7 @@ from .serializers import (
     ItemDisplaySerializer,
     ItemSerializer,
     CartItemSerializer,
+    CartSerializer,
 )
 from rest_framework.permissions import IsAuthenticated
 from account.permissions import IsAdminOrReadOnly
@@ -16,7 +17,16 @@ from rest_framework.status import (
     HTTP_206_PARTIAL_CONTENT,
     HTTP_204_NO_CONTENT,
 )
+from rest_framework.mixins import (
+    ListModelMixin,
+    CreateModelMixin,
+    RetrieveModelMixin,
+    DestroyModelMixin
+)
+from rest_framework.viewsets import GenericViewSet
 from .permissions import IsAdminOrCustomer
+from rest_framework.views import GenericAPIView
+from rest_framework.generics import RetrieveDestroyAPIView
 
 
 class ItemViewSet(ModelViewSet):
@@ -84,7 +94,8 @@ class ItemViewSet(ModelViewSet):
         return Response({"message": message}, status=HTTP_200_OK)
 
 
-class CartItemViewSet(ModelViewSet):
+class CartItemViewSet(ListModelMixin, CreateModelMixin,
+                      RetrieveModelMixin, DestroyModelMixin, GenericViewSet):
     permission_classes = [IsAdminOrCustomer, ]
     serializer_class = CartItemSerializer
 
@@ -95,7 +106,7 @@ class CartItemViewSet(ModelViewSet):
         item = Item.objects.get(pk=request.data["item_pk"])
         try:
             cart_item = CartItem.objects.get(
-                user=request.user, item=item, is_paid=False)
+                user=request.user, item=item)
             cart_item.quantity += 1
             cart_item.save()
             status = HTTP_206_PARTIAL_CONTENT
@@ -104,7 +115,7 @@ class CartItemViewSet(ModelViewSet):
                 user=request.user, item=item)
             status = HTTP_201_CREATED
             try:
-                cart = Cart.objects.get(user=request.user, is_paid=False)
+                cart = Cart.objects.get(user=request.user)
                 cart.items.add(cart_item)
             except Cart.DoesNotExist:
                 cart = Cart.objects.create(user=request.user)
@@ -123,3 +134,11 @@ class CartItemViewSet(ModelViewSet):
             cart_item.quantity -= 1
             cart_item.save()
             return Response({"message": "تعداد سفارش برای محصول کم شد"}, status=HTTP_206_PARTIAL_CONTENT)
+
+
+class CartView(RetrieveDestroyAPIView):
+    permission_classes = [IsAdminOrCustomer, ]
+    serializer_class = CartSerializer
+
+    def get_queryset(self):
+        return Cart.objects.prefetch_related("items").select_related("user")
