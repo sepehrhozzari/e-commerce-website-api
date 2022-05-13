@@ -25,7 +25,8 @@ from rest_framework.mixins import (
 )
 from rest_framework.viewsets import GenericViewSet
 from .permissions import IsAdminOrCustomer
-from rest_framework.generics import RetrieveDestroyAPIView
+from rest_framework.generics import RetrieveDestroyAPIView, ListAPIView
+from account.permissions import IsAdmin
 
 
 class ItemViewSet(ModelViewSet):
@@ -143,3 +144,9 @@ class CartRetrieve(RetrieveDestroyAPIView):
 
     def get_queryset(self):
         return Cart.objects.prefetch_related("items").select_related("user")
+
+
+class CartList(ListAPIView):
+    permission_classes = [IsAdmin]
+    serializer_class = CartSerializer
+    queryset = Cart.objects.prefetch_related("items").select_related("user")
