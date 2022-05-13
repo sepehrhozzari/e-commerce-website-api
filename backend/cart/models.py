@@ -95,6 +95,10 @@ class CartItem(models.Model):
     def total_discount_price(self):
         return self.item.discount_price * self.quantity
 
+    @property
+    def amount_saved(self):
+        return self.total_price - self.total_discount_price
+
 
 class Cart(models.Model):
     user = models.OneToOneField(
