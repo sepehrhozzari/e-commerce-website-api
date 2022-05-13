@@ -25,7 +25,6 @@ from rest_framework.mixins import (
 )
 from rest_framework.viewsets import GenericViewSet
 from .permissions import IsAdminOrCustomer
-from rest_framework.views import GenericAPIView
 from rest_framework.generics import RetrieveDestroyAPIView
 
 
@@ -136,7 +135,7 @@ class CartItemViewSet(ListModelMixin, CreateModelMixin,
             return Response({"message": "تعداد سفارش برای محصول کم شد"}, status=HTTP_206_PARTIAL_CONTENT)
 
 
-class CartView(RetrieveDestroyAPIView):
+class CartRetrieve(RetrieveDestroyAPIView):
     permission_classes = [IsAdminOrCustomer, ]
     serializer_class = CartSerializer
 
