@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Item, CartItem
+from .models import Item, CartItem, Cart
 
 
 class ItemDisplaySerializer(serializers.ModelSerializer):
@@ -35,7 +35,12 @@ class BasicItemSerializer(serializers.ModelSerializer):
 class CartItemSerializer(serializers.ModelSerializer):
     user = serializers.CharField(source="user.username")
     item = BasicItemSerializer()
+    total_price = serializers.DecimalField(max_digits=10, decimal_places=0)
+    total_discount_price = serializers.DecimalField(
+        max_digits=10, decimal_places=0)
+    amount_saved = serializers.DecimalField(max_digits=10, decimal_places=0)
 
     class Meta:
         model = CartItem
-        fields = ("user", "item", "quantity", "is_paid")
+        fields = ("user", "item", "quantity", "total_price",
+                  "total_discount_price", "amount_saved")
