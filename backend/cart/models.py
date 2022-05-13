@@ -79,7 +79,6 @@ class CartItem(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE,
                              related_name="cart_items", verbose_name="محصول")
     quantity = models.IntegerField(default=1, verbose_name="تعداد")
-    is_paid = models.BooleanField(default=False, verbose_name="پرداخت شده")
 
     def __str__(self):
         return f"{self.quantity} عدد از {self.item}"
@@ -96,13 +95,10 @@ class CartItem(models.Model):
 
 
 class Cart(models.Model):
-    user = models.ForeignKey(
+    user = models.OneToOneField(
         User, on_delete=models.CASCADE, related_name="carts", verbose_name="کاربر")
     items = models.ManyToManyField(
         CartItem, related_name="carts", verbose_name="محصولات")
-    is_paid = models.BooleanField(default=False, verbose_name="پرداخت شده")
-    paid_time = models.DateTimeField(
-        blank=True, null=True, verbose_name="زمان پراخت")
 
     def __str__(self):
         return self.user.get_full_name()
@@ -110,7 +106,6 @@ class Cart(models.Model):
     class Meta:
         verbose_name = "سبد خرید"
         verbose_name_plural = "سبد های خرید"
-        ordering = ("-is_paid",)
 
     def get_total_price(self):
         total = 0
