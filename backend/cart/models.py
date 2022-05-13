@@ -88,11 +88,11 @@ class CartItem(models.Model):
         verbose_name_plural = "آیتم های سبد خرید"
 
     @property
-    def get_total_price(self):
+    def total_price(self):
         return self.item.price * self.quantity
 
     @property
-    def get_total_discount_price(self):
+    def total_discount_price(self):
         return self.item.discount_price * self.quantity
 
 
@@ -109,7 +109,8 @@ class Cart(models.Model):
         verbose_name = "سبد خرید"
         verbose_name_plural = "سبد های خرید"
 
-    def get_total_price(self):
+    @property
+    def total_price(self):
         total = 0
         for cart_item in self.items.all():
             total += cart_item.get_total_price()
