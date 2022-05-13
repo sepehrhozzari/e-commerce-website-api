@@ -101,7 +101,8 @@ class Cart(models.Model):
     items = models.ManyToManyField(
         CartItem, related_name="carts", verbose_name="محصولات")
     is_paid = models.BooleanField(default=False, verbose_name="پرداخت شده")
-    paid_time = models.DateTimeField(blank=True, verbose_name="زمان پراخت")
+    paid_time = models.DateTimeField(
+        blank=True, null=True, verbose_name="زمان پراخت")
 
     def __str__(self):
         return self.user.get_full_name()
