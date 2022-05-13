@@ -1,12 +1,21 @@
 from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet
 from .models import Item, CartItem, Cart
-from .serializers import ItemDisplaySerializer, ItemSerializer, CartItemSerializer
+from .serializers import (
+    ItemDisplaySerializer,
+    ItemSerializer,
+    CartItemSerializer,
+)
 from rest_framework.permissions import IsAuthenticated
 from account.permissions import IsAdminOrReadOnly
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_206_PARTIAL_CONTENT
+from rest_framework.status import (
+    HTTP_200_OK,
+    HTTP_201_CREATED,
+    HTTP_206_PARTIAL_CONTENT,
+    HTTP_204_NO_CONTENT,
+)
 from .permissions import IsAdminOrCustomer
 
 
@@ -80,7 +89,7 @@ class CartItemViewSet(ModelViewSet):
     serializer_class = CartItemSerializer
 
     def get_queryset(self):
-        return CartItem.objects.filter(user=self.request.user)
+        return CartItem.objects.filter(user=self.request.user).select_related("user", "item")
 
     def create(self, request, *args, **kwargs):
         item = Item.objects.get(pk=request.data["item_pk"])
@@ -103,3 +112,14 @@ class CartItemViewSet(ModelViewSet):
 
         serializer = CartItemSerializer(cart_item)
         return Response(serializer.data, status=status)
+
+    @action(detail=True, methods=["delete"])
+    def single_cart_item_delete(self, request, pk=None):
+        cart_item = self.get_object()
+        if cart_item.quantity == 1:
+            cart_item.delete()
+            return Response(status=HTTP_204_NO_CONTENT)
+        else:
+            cart_item.quantity -= 1
+            cart_item.save()
+            return Response({"message": "تعداد سفارش برای محصول کم شد"}, status=HTTP_206_PARTIAL_CONTENT)
