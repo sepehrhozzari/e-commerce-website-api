@@ -35,12 +35,18 @@ class BasicItemSerializer(serializers.ModelSerializer):
 class CartItemSerializer(serializers.ModelSerializer):
     user = serializers.CharField(source="user.username")
     item = BasicItemSerializer()
-    total_price = serializers.DecimalField(max_digits=10, decimal_places=0)
-    total_discount_price = serializers.DecimalField(
-        max_digits=10, decimal_places=0)
-    amount_saved = serializers.DecimalField(max_digits=10, decimal_places=0)
 
     class Meta:
         model = CartItem
         fields = ("user", "item", "quantity", "total_price",
+                  "total_discount_price", "amount_saved")
+
+
+class CartSerializer(serializers.ModelSerializer):
+    user = serializers.CharField(source="user.username")
+    items = CartItemSerializer(many=True)
+
+    class Meta:
+        model = Cart
+        fields = ("user", "items", "total_price",
                   "total_discount_price", "amount_saved")
