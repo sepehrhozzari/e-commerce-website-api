@@ -116,7 +116,8 @@ class Cart(models.Model):
             total += cart_item.get_total_price()
         return total
 
-    def get_total_discount_price(self):
+    @property
+    def total_discount_price(self):
         total = 0
         for cart_item in self.items.all():
             total += cart_item.get_total_discount_price()
