@@ -87,6 +87,7 @@ class CartItem(models.Model):
         verbose_name = "آیتم سبد خرید"
         verbose_name_plural = "آیتم های سبد خرید"
 
+    @property
     def get_total_price(self):
         return self.item.price * self.quantity
 
