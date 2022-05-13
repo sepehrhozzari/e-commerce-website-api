@@ -23,9 +23,9 @@ class Item(models.Model):
     title = models.CharField(max_length=200, verbose_name="عنوان محصول")
     image = models.ImageField(upload_to="cart/", verbose_name="تصویر محصول")
     price = models.DecimalField(
-        max_digits=10, decimal_places=2, verbose_name="قیمت محصول")
+        max_digits=10, decimal_places=0, verbose_name="قیمت محصول")
     discount_price = models.DecimalField(
-        max_digits=10, decimal_places=2, verbose_name="قیمت محصول با تخفیف")
+        max_digits=10, decimal_places=0, verbose_name="قیمت محصول با تخفیف")
     description = models.TextField(verbose_name="توضیحات محصول")
     in_stock = models.BooleanField(default=True, verbose_name="موجود در انبار")
     likes = models.ManyToManyField(
@@ -79,7 +79,6 @@ class CartItem(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE,
                              related_name="cart_items", verbose_name="محصول")
     quantity = models.IntegerField(default=1, verbose_name="تعداد")
-    is_paid = models.BooleanField(default=False, verbose_name="پرداخت شده")
 
     def __str__(self):
         return f"{self.quantity} عدد از {self.item}"
@@ -88,20 +87,24 @@ class CartItem(models.Model):
         verbose_name = "آیتم سبد خرید"
         verbose_name_plural = "آیتم های سبد خرید"
 
-    def get_total_price(self):
+    @property
+    def total_price(self):
         return self.item.price * self.quantity
 
-    def get_total_discount_price(self):
+    @property
+    def total_discount_price(self):
         return self.item.discount_price * self.quantity
+
+    @property
+    def amount_saved(self):
+        return self.total_price - self.total_discount_price
 
 
 class Cart(models.Model):
-    user = models.ForeignKey(
+    user = models.OneToOneField(
         User, on_delete=models.CASCADE, related_name="carts", verbose_name="کاربر")
     items = models.ManyToManyField(
         CartItem, related_name="carts", verbose_name="محصولات")
-    is_paid = models.BooleanField(default=False, verbose_name="پرداخت شده")
-    paid_time = models.DateTimeField(blank=True, verbose_name="زمان پراخت")
 
     def __str__(self):
         return self.user.get_full_name()
@@ -109,16 +112,24 @@ class Cart(models.Model):
     class Meta:
         verbose_name = "سبد خرید"
         verbose_name_plural = "سبد های خرید"
-        ordering = ("-is_paid",)
 
-    def get_total_price(self):
+    @property
+    def total_price(self):
         total = 0
         for cart_item in self.items.all():
-            total += cart_item.get_total_price()
+            total += cart_item.total_price
         return total
 
-    def get_total_discount_price(self):
+    @property
+    def total_discount_price(self):
         total = 0
         for cart_item in self.items.all():
-            total += cart_item.get_total_discount_price()
+            total += cart_item.total_discount_price
+        return total
+
+    @property
+    def amount_saved(self):
+        total = 0
+        for cart_item in self.items.all():
+            total += cart_item.amount_saved
         return total

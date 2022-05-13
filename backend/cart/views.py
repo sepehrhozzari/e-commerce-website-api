@@ -1,12 +1,32 @@
 from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet
-from .models import Item
-from .serializers import ItemDisplaySerializer, ItemSerializer
+from .models import Item, CartItem, Cart
+from .serializers import (
+    ItemDisplaySerializer,
+    ItemSerializer,
+    CartItemSerializer,
+    CartSerializer,
+)
 from rest_framework.permissions import IsAuthenticated
 from account.permissions import IsAdminOrReadOnly
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.status import HTTP_200_OK
+from rest_framework.status import (
+    HTTP_200_OK,
+    HTTP_201_CREATED,
+    HTTP_206_PARTIAL_CONTENT,
+    HTTP_204_NO_CONTENT,
+)
+from rest_framework.mixins import (
+    ListModelMixin,
+    CreateModelMixin,
+    RetrieveModelMixin,
+    DestroyModelMixin
+)
+from rest_framework.viewsets import GenericViewSet
+from .permissions import IsAdminOrCustomer
+from rest_framework.generics import RetrieveDestroyAPIView, ListAPIView
+from account.permissions import IsAdmin
 
 
 class ItemViewSet(ModelViewSet):
@@ -72,3 +92,61 @@ class ItemViewSet(ModelViewSet):
                 item.dislikes.add(request.user)
                 message = "محصول مورد نظر دیس لایک شد"
         return Response({"message": message}, status=HTTP_200_OK)
+
+
+class CartItemViewSet(ListModelMixin, CreateModelMixin,
+                      RetrieveModelMixin, DestroyModelMixin, GenericViewSet):
+    permission_classes = [IsAdminOrCustomer, ]
+    serializer_class = CartItemSerializer
+    search_fields = ("item__title", "item__description",
+                     "user__username", "user__first_name")
+
+    def get_queryset(self):
+        return CartItem.objects.filter(user=self.request.user).select_related("user", "item")
+
+    def create(self, request, *args, **kwargs):
+        item = Item.objects.get(pk=request.data["item_pk"])
+        try:
+            cart_item = CartItem.objects.get(
+                user=request.user, item=item)
+            cart_item.quantity += 1
+            cart_item.save()
+            status = HTTP_206_PARTIAL_CONTENT
+        except:
+            cart_item = CartItem.objects.create(
+                user=request.user, item=item)
+            status = HTTP_201_CREATED
+            try:
+                cart = Cart.objects.get(user=request.user)
+                cart.items.add(cart_item)
+            except Cart.DoesNotExist:
+                cart = Cart.objects.create(user=request.user)
+                cart.items.add(cart_item)
+
+        serializer = CartItemSerializer(cart_item)
+        return Response(serializer.data, status=status)
+
+    @action(detail=True, methods=["delete"])
+    def single_cart_item_delete(self, request, pk=None):
+        cart_item = self.get_object()
+        if cart_item.quantity == 1:
+            cart_item.delete()
+            return Response(status=HTTP_204_NO_CONTENT)
+        else:
+            cart_item.quantity -= 1
+            cart_item.save()
+            return Response({"message": "تعداد سفارش برای محصول کم شد"}, status=HTTP_206_PARTIAL_CONTENT)
+
+
+class CartRetrieve(RetrieveDestroyAPIView):
+    permission_classes = [IsAdminOrCustomer, ]
+    serializer_class = CartSerializer
+
+    def get_queryset(self):
+        return Cart.objects.prefetch_related("items").select_related("user")
+
+
+class CartList(ListAPIView):
+    permission_classes = [IsAdmin]
+    serializer_class = CartSerializer
+    queryset = Cart.objects.prefetch_related("items").select_related("user")
