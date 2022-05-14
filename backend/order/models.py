@@ -35,3 +35,7 @@ class Order(models.Model):
                              related_name="orders", verbose_name="کاربر")
     items = models.ManyToManyField(
         OrderItem, related_name="orders", verbose_name="محصولات")
+
+    class Meta:
+        verbose_name = "سفارش"
+        verbose_name_plural = "سفارش ها"
