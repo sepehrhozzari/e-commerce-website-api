@@ -28,3 +28,10 @@ class OrderItem(models.Model):
     @property
     def total_amount_saved(self):
         return self.total_price - self.total_discount_price
+
+
+class Order(models.Model):
+    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL,
+                             related_name="orders", verbose_name="کاربر")
+    items = models.ManyToManyField(
+        OrderItem, related_name="orders", verbose_name="محصولات")
