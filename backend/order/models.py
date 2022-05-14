@@ -20,3 +20,7 @@ class OrderItem(models.Model):
     @property
     def total_price(self):
         return self.item.price * self.quantity
+
+    @property
+    def total_discount_price(self):
+        return self.item.discount_price * self.quantity
