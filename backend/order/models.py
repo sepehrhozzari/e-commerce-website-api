@@ -16,3 +16,7 @@ class OrderItem(models.Model):
     class Meta:
         verbose_name = "آیتم سفارش"
         verbose_name_plural = "آیتم های سفارش"
+
+    @property
+    def total_price(self):
+        return self.item.price * self.quantity
