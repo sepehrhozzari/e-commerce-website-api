@@ -39,3 +39,6 @@ class Order(models.Model):
     class Meta:
         verbose_name = "سفارش"
         verbose_name_plural = "سفارش ها"
+
+    def __str__(self):
+        return f"سفارش کاربر {self.user}"
