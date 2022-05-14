@@ -1,9 +1,11 @@
 from rest_framework import serializers
 from .models import OrderItem
+from cart.serializers import BasicItemSerializer
 
 
 class OrderItemSerializer(serializers.ModelSerializer):
     user = serializers.CharField(source="user.username")
+    item = BasicItemSerializer()
 
     class Meta:
         model = OrderItem
