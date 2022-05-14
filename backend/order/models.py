@@ -24,3 +24,7 @@ class OrderItem(models.Model):
     @property
     def total_discount_price(self):
         return self.item.discount_price * self.quantity
+
+    @property
+    def total_amount_saved(self):
+        return self.total_price - self.total_discount_price
