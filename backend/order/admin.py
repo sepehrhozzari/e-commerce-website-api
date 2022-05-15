@@ -10,6 +10,8 @@ class OrderItemAdmin(admin.ModelAdmin):
 
 class OrderAdmin(admin.ModelAdmin):
     list_display = ("user", "status")
+    search_fields = ("user__username", "user__first_name",
+                     "user__last_name", "user__email")
 
 
 admin.site.register(OrderItem, OrderItemAdmin)
