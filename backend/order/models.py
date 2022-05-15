@@ -53,20 +53,20 @@ class Order(models.Model):
     @property
     def total_price(self):
         total = 0
-        for order_item in self.items:
+        for order_item in self.items.all():
             total += order_item.total_price
         return total
 
     @property
     def total_discount_price(self):
         total = 0
-        for order_item in self.items:
+        for order_item in self.items.all():
             total += order_item.total_discount_price
         return total
 
     @property
     def total_amount_saved(self):
         total = 0
-        for order_item in self.items:
+        for order_item in self.items.all():
             total += order_item.total_amount_saved
         return total
