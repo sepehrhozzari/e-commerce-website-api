@@ -45,4 +45,7 @@ urlpatterns = [
 
     # urls for category app
     path("api/category/", include("category.urls")),
+
+    # urls for order app
+    path("api/order/", include("order.urls")),
 ]
