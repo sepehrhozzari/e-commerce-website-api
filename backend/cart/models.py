@@ -102,7 +102,7 @@ class CartItem(models.Model):
 
 class Cart(models.Model):
     user = models.OneToOneField(
-        User, on_delete=models.CASCADE, related_name="carts", verbose_name="کاربر")
+        User, on_delete=models.CASCADE, related_name="cart", verbose_name="کاربر")
     items = models.ManyToManyField(
         CartItem, related_name="carts", verbose_name="محصولات")
 
