@@ -10,6 +10,6 @@ router.register("cart-items", CartItemViewSet, basename="cart-items")
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('carts/<int:pk>/', CartRetrieve.as_view(), name="cart-detail"),
+    path('carts/detail/', CartRetrieve.as_view(), name="cart-detail"),
     path('carts/', CartList.as_view(), name="cart-list"),
 ]

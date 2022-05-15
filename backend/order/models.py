@@ -38,7 +38,7 @@ class Order(models.Model):
     )
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL,
                              related_name="orders", verbose_name="کاربر")
-    status = models.CharField(choices=STATUS_CHOICES,
+    status = models.CharField(max_length=1, choices=STATUS_CHOICES,
                               default="P", verbose_name="وضعیت")
     items = models.ManyToManyField(
         OrderItem, related_name="orders", verbose_name="محصولات")
@@ -68,5 +68,5 @@ class Order(models.Model):
     def total_amount_saved(self):
         total = 0
         for order_item in self.items:
-            total += order_item.amount_saved
+            total += order_item.total_amount_saved
         return total
