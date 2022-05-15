@@ -15,6 +15,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
 
 class OrderSerializer(serializers.ModelSerializer):
     user = serializers.CharField(source="user.username")
+    items = OrderItemSerializer(many=True)
 
     class Meta:
         model = Order
