@@ -31,8 +31,15 @@ class OrderItem(models.Model):
 
 
 class Order(models.Model):
+    STATUS_CHOICES = (
+        ("P", "در حال انجام"),
+        ("C", "تحویل داده شده"),
+        ("F", "کنسل شده"),
+    )
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL,
                              related_name="orders", verbose_name="کاربر")
+    status = models.CharField(choices=STATUS_CHOICES,
+                              default="P", verbose_name="وضعیت")
     items = models.ManyToManyField(
         OrderItem, related_name="orders", verbose_name="محصولات")
 
