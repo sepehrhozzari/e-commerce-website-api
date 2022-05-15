@@ -8,5 +8,9 @@ class OrderItemAdmin(admin.ModelAdmin):
                      "user__username", "user__first_name", "user__last_name")
 
 
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ("user", "status")
+
+
 admin.site.register(OrderItem, OrderItemAdmin)
-admin.site.register(Order)
+admin.site.register(Order, OrderAdmin)
