@@ -49,3 +49,10 @@ class Order(models.Model):
 
     def __str__(self):
         return f"سفارش کاربر {self.user}"
+
+    @property
+    def total_price(self):
+        total = 0
+        for order_item in self.items:
+            total += order_item.total_price
+        return total
