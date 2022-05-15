@@ -31,8 +31,15 @@ class OrderItem(models.Model):
 
 
 class Order(models.Model):
+    STATUS_CHOICES = (
+        ("P", "در حال انجام"),
+        ("C", "تحویل داده شده"),
+        ("F", "کنسل شده"),
+    )
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL,
                              related_name="orders", verbose_name="کاربر")
+    status = models.CharField(max_length=1, choices=STATUS_CHOICES,
+                              default="P", verbose_name="وضعیت")
     items = models.ManyToManyField(
         OrderItem, related_name="orders", verbose_name="محصولات")
 
@@ -42,3 +49,24 @@ class Order(models.Model):
 
     def __str__(self):
         return f"سفارش کاربر {self.user}"
+
+    @property
+    def total_price(self):
+        total = 0
+        for order_item in self.items.all():
+            total += order_item.total_price
+        return total
+
+    @property
+    def total_discount_price(self):
+        total = 0
+        for order_item in self.items.all():
+            total += order_item.total_discount_price
+        return total
+
+    @property
+    def total_amount_saved(self):
+        total = 0
+        for order_item in self.items.all():
+            total += order_item.total_amount_saved
+        return total

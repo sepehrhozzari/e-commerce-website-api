@@ -26,6 +26,7 @@ from rest_framework.mixins import (
 from rest_framework.viewsets import GenericViewSet
 from .permissions import IsAdminOrCustomer
 from rest_framework.generics import RetrieveDestroyAPIView, ListAPIView
+from rest_framework.exceptions import NotAuthenticated
 from account.permissions import IsAdmin
 
 
@@ -139,14 +140,28 @@ class CartItemViewSet(ListModelMixin, CreateModelMixin,
 
 
 class CartRetrieve(RetrieveDestroyAPIView):
-    permission_classes = [IsAdminOrCustomer, ]
+    permission_classes = [IsAuthenticated, ]
     serializer_class = CartSerializer
+
+    def get_object(self):
+        try:
+            cart = Cart.objects.get(user=self.request.user)
+        except Cart.DoesNotExist:
+            cart = Cart.objects.create(user=self.request.user)
+        return cart
 
     def get_queryset(self):
         return Cart.objects.prefetch_related("items").select_related("user")
 
+    def destroy(self, request, *args, **kwargs):
+        cart = self.get_object()
+        for cart_item in cart.items.all():
+            cart_item.delete()
+        cart.delete()
+        return Response(status=HTTP_204_NO_CONTENT)
+
 
 class CartList(ListAPIView):
-    permission_classes = [IsAdmin]
+    permission_classes = [IsAdmin, ]
     serializer_class = CartSerializer
     queryset = Cart.objects.prefetch_related("items").select_related("user")

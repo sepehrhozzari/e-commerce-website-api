@@ -102,7 +102,7 @@ class CartItem(models.Model):
 
 class Cart(models.Model):
     user = models.OneToOneField(
-        User, on_delete=models.CASCADE, related_name="carts", verbose_name="کاربر")
+        User, on_delete=models.CASCADE, related_name="cart", verbose_name="کاربر")
     items = models.ManyToManyField(
         CartItem, related_name="carts", verbose_name="محصولات")
 
@@ -128,8 +128,8 @@ class Cart(models.Model):
         return total
 
     @property
-    def amount_saved(self):
+    def total_amount_saved(self):
         total = 0
         for cart_item in self.items.all():
-            total += cart_item.amount_saved
+            total += cart_item.total_amount_saved
         return total

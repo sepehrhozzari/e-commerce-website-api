@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import OrderItem
+from .models import OrderItem, Order
 
 
 class OrderItemAdmin(admin.ModelAdmin):
@@ -8,4 +8,11 @@ class OrderItemAdmin(admin.ModelAdmin):
                      "user__username", "user__first_name", "user__last_name")
 
 
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ("user", "status")
+    search_fields = ("user__username", "user__first_name",
+                     "user__last_name", "user__email")
+
+
 admin.site.register(OrderItem, OrderItemAdmin)
+admin.site.register(Order, OrderAdmin)
