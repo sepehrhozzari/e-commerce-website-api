@@ -63,3 +63,10 @@ class Order(models.Model):
         for order_item in self.items:
             total += order_item.total_discount_price
         return total
+
+    @property
+    def total_amount_saved(self):
+        total = 0
+        for order_item in self.items:
+            total += order_item.amount_saved
+        return total
