@@ -146,7 +146,7 @@ class CartRetrieve(RetrieveDestroyAPIView):
     def get_object(self):
         try:
             cart = Cart.objects.get(user=self.request.user)
-        except:
+        except Cart.DoesNotExist:
             cart = Cart.objects.create(user=self.request.user)
         return cart
 
