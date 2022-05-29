@@ -53,18 +53,23 @@ urlpatterns = [
 
 
     # urls for account app
-    path("api/account/", include("account.urls")),
+    path("api/v1/account/", include("account.urls", namespace="account_v1")),
+    path("api/v2/account/", include("account.urls", namespace="account_v2")),
 
 
     # urls for cart app
-    path("api/cart/", include("cart.urls")),
+    path("api/v1/cart/", include("cart.urls", namespace="cart_v1")),
+    path("api/v2/cart/", include("cart.urls", namespace="cart_v2")),
 
 
     # urls for category app
-    path("api/category/", include("category.urls")),
+    path("api/v1/category/", include("category.urls", namespace="category_v1")),
+    path("api/v2/category/", include("category.urls", namespace="category_v2")),
+
 
     # urls for order app
-    path("api/order/", include("order.urls")),
+    path("api/v1/order/", include("order.urls", namespace="order_v1")),
+    path("api/v2/order/", include("order.urls", namespace="order_v2")),
 
     path('swagger/', schema_view.with_ui("swagger",
          cache_timeout=0), name="schema-swagger-ui"),

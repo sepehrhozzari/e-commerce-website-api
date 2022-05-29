@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'dj_rest_auth.registration',
     'django_filters',
+    'drf_yasg',
 
     # our apps
     'account.apps.AccountConfig',
